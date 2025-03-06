@@ -25,7 +25,6 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
-
 Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
 Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update'); 
 
@@ -40,14 +39,10 @@ Route::post('store/post', [PostController::class, 'store'])
     ->name('store.post');
 
 Route::get('/posts/create', [PostController::class, 'showCreate'])->name('posts.create');
-
 Route::post('/like-post', [LikeController::class, 'likePost'])->name('like.post');
 
 Route::post('/comments/{id}', [CommentController::class, 'store'])->name('comments.post');
 Route::get('/comments/{post}', [CommentController::class, 'index'])->name('comments.show');
-
-
-
 // Route::middleware(['auth'])->group(function () {
 //     Route::get('/posts', [PostController::class, 'index'])->name('posts.index'); // Everyone can read
 
@@ -55,19 +50,8 @@ Route::get('/comments/{post}', [CommentController::class, 'index'])->name('comme
 //         Route::resource('posts', PostController::class)->except(['index']); // Admin can do everything
 //     });
 
-     Route::middleware(['role:author'])->group(function () {
-        
-
-
-
+//     Route::middleware(['role:author'])->group(function () {
 //         Route::resource('posts', PostController::class)->except(['index', 'destroy']); // Author can manage but not delete
 //     });
- });
-
-
-
-
-
-
-
+// });
 require __DIR__.'/auth.php';

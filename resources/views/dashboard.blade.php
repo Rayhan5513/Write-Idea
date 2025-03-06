@@ -1,27 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Posts</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
 <body>
     <x-app-layout>
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 ml-36 mr-36">
                     <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">All Posts</h2>
-
                     @if(session('success'))
                         <div id="success-message"
                             class="bg-red-500 text-white p-3 mb-4 rounded fixed top-20 right-20 shadow-lg z-50">
                             {{ session('success') }}
                         </div>
                     @endif
-
                     @foreach ($posts as $post)
                                         <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg shadow-md mb-6 relative">
                                             <div class="absolute top-4 right-4">
@@ -31,28 +27,28 @@
                                                 </button>
                                                 <div id="menu-{{ $post->id }}"
                                                     class="hidden absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg">
-                                                    @if((auth()->user()->isAuthor()&&(auth()->user()->id == $post->user->id))||auth()->user()->isAdmin())
-                                                         <a href="{{ route('posts.edit', $post->id) }}"
-                                                        class="block px-4 py-2 text-gray-700 hover:bg-gray-200">
-                                                        ✏️ Edit
-                                                         </a>
-                                                    
-
-                                                    <form action="{{ route('posts.destroy', $post->id) }}" method="POST" class="block"
-                                                        onsubmit="return confirm('Are you sure you want to delete this post?');">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit"
-                                                            class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-100">
-                                                            🗑️ Delete
-                                                        </button>
-                                                    </form>
+                                                    @if((auth()->user()->isAuthor() && (auth()->user()->id == $post->user->id)) || auth()->user()->isAdmin())
+                                                        <a href="{{ route('posts.edit', $post->id) }}"
+                                                            class="block px-4 py-2 text-gray-700 hover:bg-gray-200">
+                                                            ✏️ Edit
+                                                        </a>
+                                                        <form action="{{ route('posts.destroy', $post->id) }}" method="POST" class="block"
+                                                            onsubmit="return confirm('Are you sure you want to delete this post?');">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit"
+                                                                class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-100">
+                                                                🗑️ Delete
+                                                            </button>
+                                                        </form>
                                                     @else
-                                                    <h3>you are not permitted</h3>
+                                                        <h3>you are not permitted</h3>
                                                     @endif
                                                 </div>
                                             </div>
-                                            <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">{{ $post->title }}</h1>
+                                            <h1
+                                                class="text-3xl font-bold  text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-pink-600 to-purple-600">
+                                                {{ $post->title }}</h1>
                                             <div class="flex flex-wrap gap-4 mt-4 ">
                                                 @foreach ($post->categories as $category)
                                                     <span class="inline-block py-1 px-6 text-sm font-semibold text-white rounded-full"
@@ -122,10 +118,9 @@
                     successMessage.style.transition = "opacity 0.3s ease";
                     successMessage.style.opacity = "0";
                     setTimeout(() => successMessage.remove(), 300);
-                }, 3000); 
+                }, 3000);
             }
         });
     </script>
 </body>
-
 </html>

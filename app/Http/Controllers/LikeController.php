@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Like;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
-
 class LikeController extends Controller
 {
     public function likePost(Request $request)
@@ -14,7 +13,6 @@ class LikeController extends Controller
         $request->validate([
             'post_id' => 'required|exists:posts,id',
         ]);
-
         $user = Auth::user();
         $postId = $request->post_id;
         $existingLike = Like::where('user_id', $user->id)->where('post_id', $postId)->first();

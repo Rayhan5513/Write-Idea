@@ -7,35 +7,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
-
-
-
     public function isAdmin()
     {
         return $this->role === 'admin';
     }
-
     public function isAuthor()
     {
         return $this->role === 'author';
     }
-
     public function isUser()
     {
         return $this->role === 'user';
     }
-
-
-
-
-
-
-
     /**
      * The attributes that are mass assignable.
      *
@@ -75,11 +62,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class);
     }
-
     public function comments()
     {
         return $this->hasMany(Comment::class);
     }
-
-
 }

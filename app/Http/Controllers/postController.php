@@ -8,10 +8,8 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Log;
 class PostController extends Controller
 {
-
     public function showCreate()
-    {
-        
+    {   
         $categories = Category::all();
         return view('posts.create', compact('categories'));
     }
@@ -65,5 +63,4 @@ class PostController extends Controller
         ]);
         return redirect()->route('dashboard')->with('success', 'Post updated successfully!');
     }
-
 }
