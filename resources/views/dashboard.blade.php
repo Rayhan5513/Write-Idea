@@ -31,7 +31,7 @@
                                                 </button>
                                                 <div id="menu-{{ $post->id }}"
                                                     class="hidden absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg">
-                                                    @if((auth()->user()->isAuthor())||auth()->user()->isAdmin())
+                                                    @if((auth()->user()->isAuthor()&&(auth()->user()->id == $post->user->id))||auth()->user()->isAdmin())
                                                          <a href="{{ route('posts.edit', $post->id) }}"
                                                         class="block px-4 py-2 text-gray-700 hover:bg-gray-200">
                                                         ✏️ Edit
