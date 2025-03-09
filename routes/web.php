@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Http\Controllers\LikeController;
 use App\Models\Like;
 use App\Http\Controllers\CommentController;
+use App\Models\Category;
 
 Route::get('register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('registerForm', [AuthController::class, 'register'])->name('registerForm');
@@ -20,9 +21,25 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('/dashboard', function () {
+
+/*Route::get('/dashboard', function () {
     return view('dashboard', ['posts' => Post::with('user')->latest()->get()]);
+})->middleware(['auth', 'verified'])->name('dashboard');*/
+
+Route::get('/dashboard', function () {
+    $posts = Post::with(['user', 'categories'])->latest()->get();
+    $categories = Category::all();
+    return view('dashboard', compact('posts', 'categories'));
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/category/{id}', function ($id) {
+    $category = Category::findOrFail($id);
+    $posts = $category->posts()->with(['user', 'categories'])->latest()->get();
+    $categories = Category::all();
+    
+    return view('dashboard', compact('posts', 'categories', 'category'));
+})->middleware(['auth', 'verified'])->name('category.posts');
+
 
 Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
 Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');

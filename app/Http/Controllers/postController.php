@@ -2,12 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PostResource;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Category;
 use Illuminate\Support\Facades\Log;
+use MessageFormatter;
 class PostController extends Controller
 {
+
+
+    public function index()
+    {
+        $posts = Post::get();
+
+        if($posts)
+        {
+            return PostResource::collection($posts);
+
+        }
+        else
+        {
+            return response()->json(['message'=>'No data available'],200);
+        }
+    }
+
+
+
+
+
     public function showCreate()
     {   
         $categories = Category::all();
