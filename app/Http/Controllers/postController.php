@@ -10,27 +10,32 @@ use Illuminate\Support\Facades\Log;
 use MessageFormatter;
 class PostController extends Controller
 {
-
-
     public function index()
     {
         $posts = Post::get();
-
         if($posts)
         {
             return PostResource::collection($posts);
-
         }
         else
         {
             return response()->json(['message'=>'No data available'],200);
         }
     }
+    public function viewPost ()
+    {
+        $posts = Post::with(['user', 'categories'])->latest()->get();
+        $categories = Category::all();
+        return view('dashboard', compact('posts', 'categories'));
+    }
 
-
-
-
-
+    public function postSorting($id)
+    {
+        $category = Category::findOrFail($id);
+        $posts = $category->posts()->with(['user', 'categories'])->latest()->get();
+        $categories = Category::all();
+        return view('dashboard', compact('posts', 'categories', 'category'));
+    }
     public function showCreate()
     {   
         $categories = Category::all();

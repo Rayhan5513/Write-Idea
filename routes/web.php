@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\postController;
@@ -8,6 +9,7 @@ use App\Models\Post;
 use App\Http\Controllers\LikeController;
 use App\Models\Like;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\AdminController;
 use App\Models\Category;
 
 Route::get('register', [AuthController::class, 'showRegisterForm'])->name('register');
@@ -21,25 +23,35 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+Route::get('/dashboard',[PostController::class,'viewPost'])
+->middleware(['auth','verified'])->name('dashboard');
 
-/*Route::get('/dashboard', function () {
-    return view('dashboard', ['posts' => Post::with('user')->latest()->get()]);
-})->middleware(['auth', 'verified'])->name('dashboard');*/
 
-Route::get('/dashboard', function () {
-    $posts = Post::with(['user', 'categories'])->latest()->get();
-    $categories = Category::all();
-    return view('dashboard', compact('posts', 'categories'));
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/admin/dashboard', [AdminController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('admin.dashboard');
 
-Route::get('/category/{id}', function ($id) {
-    $category = Category::findOrFail($id);
-    $posts = $category->posts()->with(['user', 'categories'])->latest()->get();
-    $categories = Category::all();
-    
-    return view('dashboard', compact('posts', 'categories', 'category'));
-})->middleware(['auth', 'verified'])->name('category.posts');
 
+ Route::get('/admin/CategoryEdit', [AdminController::class, 'CategoryEdit'])
+    ->middleware(['auth', 'verified'])
+    ->name('admin.CategoryEdit');
+
+Route::put('/admin/CategoryUpdate/{category}', [AdminController::class, 'CategoryUpdate'])
+    ->middleware(['auth', 'verified'])
+    ->name('admin.CategoryUpdate');
+
+
+    Route::delete('/admin/CategoryDelete/{category}', [AdminController::class, 'CategoryDelete'])
+    ->middleware(['auth', 'verified'])
+    ->name('admin.CategoryDelete');
+
+
+
+
+
+
+route::get('/category/{id}', [PostController::class,'postSorting'])
+->Middleware(['auth','verified'])->name('category.posts');
 
 Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
 Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
@@ -60,6 +72,8 @@ Route::post('/like-post', [LikeController::class, 'likePost'])->name('like.post'
 
 Route::post('/comments/{id}', [CommentController::class, 'store'])->name('comments.post');
 Route::get('/comments/{post}', [CommentController::class, 'index'])->name('comments.show');
+
+
 // Route::middleware(['auth'])->group(function () {
 //     Route::get('/posts', [PostController::class, 'index'])->name('posts.index'); // Everyone can read
 
